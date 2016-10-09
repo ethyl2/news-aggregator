@@ -48,6 +48,10 @@ APP.Main = (function() {
     tmplStoryDetailsComment = tmplStoryDetailsComment.replace(intlRelative, '');
   }
 
+  var storyDetails = document.createElement('section');
+  storyDetails.classList.add('story-details');
+  document.body.appendChild(storyDetails);
+
   var storyTemplate =
       Handlebars.compile(tmplStory);
   var storyDetailsTemplate =
@@ -63,34 +67,26 @@ APP.Main = (function() {
    */
   function onStoryData (key, details) {
 
-    // This seems odd. Surely we could just select the story
-    // directly rather than looping through all of them.
-    var storyElements = document.querySelectorAll('.story');
+      details.time *= 1000;
+      var story = document.querySelector('.story#s-' + key);
+      var html = storyTemplate(details);
+      story.innerHTML = html;
+      story.addEventListener('click', onStoryClick.bind(this, details));
+      story.classList.add('clickable');
 
-    for (var i = 0; i < storyElements.length; i++) {
+      // Tick down. When zero we can batch in the next load.
+      storyLoadCount--;
 
-      if (storyElements[i].getAttribute('id') === 's-' + key) {
-
-        details.time *= 1000;
-        var story = storyElements[i];
-        var html = storyTemplate(details);
-        story.innerHTML = html;
-        story.addEventListener('click', onStoryClick.bind(this, details));
-        story.classList.add('clickable');
-
-        // Tick down. When zero we can batch in the next load.
-        storyLoadCount--;
-
-      }
-    }
-  }
+      };
 
   function onStoryClick(details) {
 
     var storyDetails = $('sd-' + details.id);
 
     // Wait a little time then show the story details.
-    setTimeout(showStory.bind(this, details.id), 60);
+    //** The line below is the original:
+    //setTimeout(showStory.bind(this, details.id), 60);
+    requestAnimationFrame(showStory.bind(this, details.id));
 
     // Create and append the story. A visual change...
     // perhaps that should be in a requestAnimationFrame?
@@ -187,7 +183,9 @@ APP.Main = (function() {
 
       // Set up the next bit of the animation if there is more to do.
       if (Math.abs(left) > 0.5)
-        setTimeout(animate, 4);
+      //**Line below is original:
+        //setTimeout(animate, 4);
+        requestAnimationFrame(animate);
       else
         left = 0;
 
@@ -200,7 +198,9 @@ APP.Main = (function() {
     // every few milliseconds. That's going to keep
     // it all tight. Or maybe we're doing visual changes
     // and they should be in a requestAnimationFrame
-    setTimeout(animate, 4);
+    //**Here's the original below:
+    //setTimeout(animate, 4);
+    requestAnimationFrame(animate);
   }
 
   function hideStory(id) {
@@ -241,7 +241,9 @@ APP.Main = (function() {
     // every few milliseconds. That's going to keep
     // it all tight. Or maybe we're doing visual changes
     // and they should be in a requestAnimationFrame
-    setTimeout(animate, 4);
+    //** Original line below:
+    //setTimeout(animate, 4);
+    requestAnimationFrame(animate);
   }
 
   main.addEventListener('touchstart', function(evt) {
