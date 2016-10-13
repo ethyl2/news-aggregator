@@ -16,6 +16,12 @@
  */
 APP.Main = (function() {
 
+  var headerSubhead = document.querySelector('.header__subhead');
+  var DateNode = document.createElement('h4');
+  DateNode.innerHTML = new Date();;
+  DateNode.classList.add('header__subhead');
+  headerSubhead.appendChild(DateNode);
+
   var LAZY_LOAD_THRESHOLD = 300;
   var $ = document.querySelector.bind(document);
 
