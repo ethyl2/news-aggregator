@@ -12,6 +12,7 @@ with CSS transitions instead of JavaScript.
 
 To more easily tell my project apart from the original one, I tweaked the colors
 a bit and added the current date/time to the subheader.
+
 -----------------------------------------------------------------------------
 # Udacity 60fps Course Samples
 
